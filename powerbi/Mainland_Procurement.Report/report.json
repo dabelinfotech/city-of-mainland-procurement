@@ -1,0 +1,211 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.0.0/schema.json",
+  "config": "{\"version\": \"5.43\", \"themeCollection\": {\"baseTheme\": {\"name\": \"CY24SU10\"}}}",
+  "layoutOptimization": 0,
+  "sections": [
+    {
+      "name": "p1",
+      "displayName": "Executive Overview",
+      "displayOption": 1,
+      "width": 1280,
+      "height": 720,
+      "visualContainers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 200,
+          "height": 90,
+          "z": 0,
+          "config": "{\"name\": \"v00card\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}}}"
+        },
+        {
+          "x": 210,
+          "y": 0,
+          "width": 200,
+          "height": 90,
+          "z": 0,
+          "config": "{\"name\": \"v2100card\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Purchased Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Purchased Amount\"}, \"Name\": \"PurchaseTrans.Purchased Amount\"}]}}}"
+        },
+        {
+          "x": 420,
+          "y": 0,
+          "width": 200,
+          "height": 90,
+          "z": 0,
+          "config": "{\"name\": \"v4200card\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Discount Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Discount Amount\"}, \"Name\": \"PurchaseTrans.Discount Amount\"}]}}}"
+        },
+        {
+          "x": 630,
+          "y": 0,
+          "width": 200,
+          "height": 90,
+          "z": 0,
+          "config": "{\"name\": \"v6300card\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Total Order Qty\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Total Order Qty\"}, \"Name\": \"PurchaseTrans.Total Order Qty\"}]}}}"
+        },
+        {
+          "x": 840,
+          "y": 0,
+          "width": 200,
+          "height": 90,
+          "z": 0,
+          "config": "{\"name\": \"v8400card\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Distinct Products\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Distinct Products\"}, \"Name\": \"PurchaseTrans.Distinct Products\"}]}}}"
+        },
+        {
+          "x": 1050,
+          "y": 0,
+          "width": 200,
+          "height": 90,
+          "z": 0,
+          "config": "{\"name\": \"v10500card\", \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Distinct Suppliers\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Distinct Suppliers\"}, \"Name\": \"PurchaseTrans.Distinct Suppliers\"}]}}}"
+        },
+        {
+          "x": 0,
+          "y": 100,
+          "width": 640,
+          "height": 260,
+          "z": 0,
+          "config": "{\"name\": \"v0100lineChart\", \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"PurchaseTrans.OrderMonth\"}], \"Y\": [{\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"OrderMonth\"}, \"Name\": \"PurchaseTrans.OrderMonth\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Net Purchase by Month'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 100,
+          "width": 290,
+          "height": 260,
+          "z": 0,
+          "config": "{\"name\": \"v650100donutChart\", \"singleVisual\": {\"visualType\": \"donutChart\", \"projections\": {\"Category\": [{\"queryRef\": \"PurchaseTrans.Class\"}], \"Y\": [{\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Class\"}, \"Name\": \"PurchaseTrans.Class\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Net by Class'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 960,
+          "y": 100,
+          "width": 290,
+          "height": 260,
+          "z": 0,
+          "config": "{\"name\": \"v960100barChart\", \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"PurchaseTrans.Country\"}], \"Y\": [{\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Country\"}, \"Name\": \"PurchaseTrans.Country\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Net by Country'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 0,
+          "y": 370,
+          "width": 640,
+          "height": 250,
+          "z": 0,
+          "config": "{\"name\": \"v0370columnChart\", \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"DimProduct.CategoryName\"}], \"Y\": [{\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"DimProduct\", \"Type\": 0}, {\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"CategoryName\"}, \"Name\": \"DimProduct.CategoryName\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Net by Category'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 370,
+          "width": 290,
+          "height": 120,
+          "z": 0,
+          "config": "{\"name\": \"v650370slicer\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Country\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Country\"}, \"Name\": \"PurchaseTrans.Country\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Country'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 500,
+          "width": 290,
+          "height": 120,
+          "z": 0,
+          "config": "{\"name\": \"v650500slicer\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.OrderYear\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"OrderYear\"}, \"Name\": \"PurchaseTrans.OrderYear\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Year'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 960,
+          "y": 370,
+          "width": 290,
+          "height": 250,
+          "z": 0,
+          "config": "{\"name\": \"v960370slicer\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"DimProduct.CategoryName\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"DimProduct\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"CategoryName\"}, \"Name\": \"DimProduct.CategoryName\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Category'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "p2",
+      "displayName": "Top 10 by Country",
+      "displayOption": 1,
+      "width": 1280,
+      "height": 720,
+      "visualContainers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 820,
+          "height": 600,
+          "z": 0,
+          "config": "{\"name\": \"v00clusteredBarChart\", \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"DimProduct.ProductName\"}], \"Y\": [{\"queryRef\": \"PurchaseTrans.Total Order Qty\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"DimProduct\", \"Type\": 0}, {\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"ProductName\"}, \"Name\": \"DimProduct.ProductName\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Total Order Qty\"}, \"Name\": \"PurchaseTrans.Total Order Qty\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top Products by Qty'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 830,
+          "y": 0,
+          "width": 420,
+          "height": 300,
+          "z": 0,
+          "config": "{\"name\": \"v8300slicer\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Country\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Country\"}, \"Name\": \"PurchaseTrans.Country\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Country'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 830,
+          "y": 310,
+          "width": 420,
+          "height": 290,
+          "z": 0,
+          "config": "{\"name\": \"v830310tableEx\", \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"DimProduct.ProductName\"}, {\"queryRef\": \"DimProduct.CategoryName\"}, {\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}, {\"queryRef\": \"PurchaseTrans.Total Order Qty\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"DimProduct\", \"Type\": 0}, {\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"ProductName\"}, \"Name\": \"DimProduct.ProductName\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"CategoryName\"}, \"Name\": \"DimProduct.CategoryName\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Total Order Qty\"}, \"Name\": \"PurchaseTrans.Total Order Qty\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Product Detail'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "p3",
+      "displayName": "Supplier Discounts",
+      "displayOption": 1,
+      "width": 1280,
+      "height": 720,
+      "visualContainers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 300,
+          "height": 600,
+          "z": 0,
+          "config": "{\"name\": \"v00slicer\", \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"DimProduct.CategoryName\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"DimProduct\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"CategoryName\"}, \"Name\": \"DimProduct.CategoryName\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Product Category'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 310,
+          "y": 0,
+          "width": 940,
+          "height": 600,
+          "z": 0,
+          "config": "{\"name\": \"v3100pivotTable\", \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"PurchaseTrans.Supplier\"}], \"Columns\": [{\"queryRef\": \"DimProduct.CategoryName\"}], \"Values\": [{\"queryRef\": \"PurchaseTrans.Discount Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}, {\"Name\": \"d\", \"Entity\": \"DimProduct\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Supplier\"}, \"Name\": \"PurchaseTrans.Supplier\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"CategoryName\"}, \"Name\": \"DimProduct.CategoryName\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Discount Amount\"}, \"Name\": \"PurchaseTrans.Discount Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Supplier Discounts by Category'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "p4",
+      "displayName": "Geographic & Class",
+      "displayOption": 1,
+      "width": 1280,
+      "height": 720,
+      "visualContainers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 620,
+          "height": 360,
+          "z": 0,
+          "config": "{\"name\": \"v00map\", \"singleVisual\": {\"visualType\": \"map\", \"projections\": {\"Category\": [{\"queryRef\": \"PurchaseTrans.Country\"}], \"Size\": [{\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Country\"}, \"Name\": \"PurchaseTrans.Country\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Net by Geography'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 630,
+          "y": 0,
+          "width": 620,
+          "height": 360,
+          "z": 0,
+          "config": "{\"name\": \"v6300columnChart\", \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"PurchaseTrans.Class\"}], \"Y\": [{\"queryRef\": \"PurchaseTrans.Total Order Qty\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Class\"}, \"Name\": \"PurchaseTrans.Class\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Total Order Qty\"}, \"Name\": \"PurchaseTrans.Total Order Qty\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Qty by Class'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        },
+        {
+          "x": 0,
+          "y": 370,
+          "width": 1250,
+          "height": 250,
+          "z": 0,
+          "config": "{\"name\": \"v0370tableEx\", \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"PurchaseTrans.Country\"}, {\"queryRef\": \"PurchaseTrans.StateProvince\"}, {\"queryRef\": \"PurchaseTrans.City\"}, {\"queryRef\": \"PurchaseTrans.Purchased Amount\"}, {\"queryRef\": \"PurchaseTrans.Discount Amount\"}, {\"queryRef\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"PurchaseTrans\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Country\"}, \"Name\": \"PurchaseTrans.Country\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"StateProvince\"}, \"Name\": \"PurchaseTrans.StateProvince\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"City\"}, \"Name\": \"PurchaseTrans.City\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Purchased Amount\"}, \"Name\": \"PurchaseTrans.Purchased Amount\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Discount Amount\"}, \"Name\": \"PurchaseTrans.Discount Amount\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Net Purchase Amount\"}, \"Name\": \"PurchaseTrans.Net Purchase Amount\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Geographic Detail'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}"
+        }
+      ]
+    }
+  ]
+}

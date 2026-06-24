@@ -1,0 +1,214 @@
+table PurchaseTrans
+	lineageTag: purchasetrans-tag
+
+	column TransID
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: TransID
+		lineageTag: TransID-tag
+
+	column OrderID
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: OrderID
+		lineageTag: OrderID-tag
+
+	column AccountNumber
+		dataType: string
+		summarizeBy: none
+		sourceColumn: AccountNumber
+		lineageTag: AccountNumber-tag
+
+	column Supplier
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Supplier
+		lineageTag: Supplier-tag
+
+	column Address
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Address
+		lineageTag: Address-tag
+
+	column City
+		dataType: string
+		summarizeBy: none
+		sourceColumn: City
+		lineageTag: City-tag
+
+	column PostalCode
+		dataType: string
+		summarizeBy: none
+		sourceColumn: PostalCode
+		lineageTag: PostalCode-tag
+
+	column StateProvince
+		dataType: string
+		summarizeBy: none
+		sourceColumn: StateProvince
+		lineageTag: StateProvince-tag
+
+	column Country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Country
+		lineageTag: Country-tag
+
+	column Employee
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Employee
+		lineageTag: Employee-tag
+
+	column DueDate
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: DueDate
+		formatString: "yyyy-mm-dd"
+		lineageTag: DueDate-tag
+
+	column ShipDate
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ShipDate
+		formatString: "yyyy-mm-dd"
+		lineageTag: ShipDate-tag
+
+	column OrderDate
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: OrderDate
+		formatString: "yyyy-mm-dd"
+		lineageTag: OrderDate-tag
+
+	column CarrierTrackingNumber
+		dataType: string
+		summarizeBy: none
+		sourceColumn: CarrierTrackingNumber
+		lineageTag: CarrierTrackingNumber-tag
+
+	column ProductID
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: ProductID
+		lineageTag: ProductID-tag
+
+	column OrderQty
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: OrderQty
+		formatString: #,0
+		lineageTag: OrderQty-tag
+
+	column Class
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Class
+		lineageTag: Class-tag
+
+	column Color
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Color
+		lineageTag: Color-tag
+
+	column ListPrice
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: ListPrice
+		formatString: \\$#,0.00
+		lineageTag: ListPrice-tag
+
+	column SpecialOfferID
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: SpecialOfferID
+		lineageTag: SpecialOfferID-tag
+
+	column UnitPrice
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+		formatString: \\$#,0.00
+		lineageTag: UnitPrice-tag
+
+	column UnitPriceDiscount
+		dataType: double
+		summarizeBy: none
+		sourceColumn: UnitPriceDiscount
+		formatString: 0.00
+		lineageTag: UnitPriceDiscount-tag
+
+	column PurchasedAmount
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: PurchasedAmount
+		formatString: \\$#,0
+		lineageTag: PurchasedAmount-tag
+
+	column DiscountAmount
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: DiscountAmount
+		formatString: \\$#,0
+		lineageTag: DiscountAmount-tag
+
+	column NetPurchaseAmount
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: NetPurchaseAmount
+		formatString: \\$#,0
+		lineageTag: NetPurchaseAmount-tag
+
+	column OrderYear
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: OrderYear
+		lineageTag: OrderYear-tag
+
+	column OrderMonth
+		dataType: string
+		summarizeBy: none
+		sourceColumn: OrderMonth
+		lineageTag: OrderMonth-tag
+
+	measure 'Purchased Amount' = SUMX(PurchaseTrans, PurchaseTrans[UnitPrice] * PurchaseTrans[OrderQty])
+		formatString: "\\$#,0"
+		lineageTag: PurchasedAmount-m
+
+	measure 'Discount Amount' = SUMX(PurchaseTrans, PurchaseTrans[UnitPriceDiscount] * PurchaseTrans[UnitPrice] * PurchaseTrans[OrderQty])
+		formatString: "\\$#,0"
+		lineageTag: DiscountAmount-m
+
+	measure 'Net Purchase Amount' = [Purchased Amount] - [Discount Amount]
+		formatString: "\\$#,0"
+		lineageTag: NetPurchaseAmount-m
+
+	measure 'Total Order Qty' = SUM(PurchaseTrans[OrderQty])
+		formatString: "#,0"
+		lineageTag: TotalOrderQty-m
+
+	measure 'Distinct Products' = DISTINCTCOUNT(PurchaseTrans[ProductID])
+		formatString: "#,0"
+		lineageTag: DistinctProducts-m
+
+	measure 'Distinct Suppliers' = DISTINCTCOUNT(PurchaseTrans[Supplier])
+		formatString: "#,0"
+		lineageTag: DistinctSuppliers-m
+
+	measure 'Net Purchase KPI' = ```
+		VAR Net = [Net Purchase Amount]
+		RETURN SWITCH(TRUE(), Net < 10000, "Low", Net <= 20000, "Medium", "HIGH")
+		```
+		lineageTag: netkpi-m
+
+	partition PurchaseTrans = m
+		mode: import
+		source =
+				let
+					Src = Csv.Document(File.Contents(DataFolder & "PurchaseTrans.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Prom = Table.PromoteHeaders(Src, [PromoteAllScalars=true]),
+					Typed = Table.TransformColumnTypes(Prom, {{"TransID", Int64.Type}, {"OrderID", Int64.Type}, {"ProductID", Int64.Type}, {"OrderQty", Int64.Type}, {"SpecialOfferID", Int64.Type}, {"OrderYear", Int64.Type}, {"ListPrice", type number}, {"UnitPrice", type number}, {"UnitPriceDiscount", type number}, {"PurchasedAmount", type number}, {"DiscountAmount", type number}, {"NetPurchaseAmount", type number}, {"DueDate", type date}, {"ShipDate", type date}, {"OrderDate", type date}})
+				in
+					Typed

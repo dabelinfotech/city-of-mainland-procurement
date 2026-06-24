@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>City of Mainland — Procurement Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f1f3f6;--panel:#fff;--ink:#252423;--mut:#605e5c;--line:#e1dfdd;
+--c1:#118dff;--c2:#12239e;--c3:#e66c37;--c4:#6b007b;--c5:#118dff;--lo:#d13438;--md:#f7b500;--hi:#107c10;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.top{background:#252423;color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+.top h1{font-size:18px;margin:0;font-weight:600;letter-spacing:.2px}
+.top .sub{font-size:12px;color:#c8c6c4}
+.tabs{display:flex;gap:2px;background:#323130;padding:0 14px}
+.tab{padding:11px 18px;color:#c8c6c4;cursor:pointer;font-size:13px;border-bottom:3px solid transparent}
+.tab.active{color:#fff;border-bottom-color:var(--c1);background:#3b3a39}
+.page{display:none;padding:16px}
+.page.active{display:block}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(6,1fr)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.kpi .lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
+.kpi .val{font-size:22px;font-weight:700;margin-top:4px}
+.kpi .sm{font-size:11px;color:var(--mut)}
+.panel h3{margin:0 0 10px;font-size:13px;font-weight:600;color:var(--ink)}
+.r2{grid-template-columns:2fr 1fr}
+.r3{grid-template-columns:1fr 1fr 1fr}
+.r21{grid-template-columns:1fr 1fr}
+canvas{max-height:300px}
+.kpiband{display:flex;align-items:center;gap:14px}
+.badge{font-size:26px;font-weight:800;padding:6px 18px;border-radius:6px;color:#fff}
+.badge.hi{background:var(--hi)}.badge.md{background:var(--md);color:#3a2c00}.badge.lo{background:var(--lo)}
+.scale{flex:1}
+.scale .bar{height:10px;border-radius:5px;background:linear-gradient(90deg,var(--lo) 0 33%,var(--md) 33% 66%,var(--hi) 66%)}
+.scale .ticks{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line)}
+th{background:#faf9f8;color:var(--mut);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.3px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr:hover td{background:#f3f9ff}
+.pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.pill.hi{background:#dff6df;color:var(--hi)}.pill.md{background:#fff4d6;color:#8a6500}.pill.lo{background:#fde7e9;color:var(--lo)}
+.note{font-size:11px;color:var(--mut);margin-top:8px}
+select{font-family:inherit;font-size:12px;padding:5px 8px;border:1px solid var(--line);border-radius:4px;background:#fff}
+.slicers{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.slicers label{font-size:11px;color:var(--mut)}
+.foot{padding:10px 22px;font-size:11px;color:var(--mut);text-align:center}
+</style>
+</head>
+<body>
+<div class="top">
+  <div><h1>City of Mainland — Procurement Dashboard</h1>
+  <div class="sub">Bicycle products &amp; parts &middot; Net Purchase Amount in CAD &middot; Order dates 2011-05 → 2014-05</div></div>
+  <div class="sub">26,357 transactions &middot; 104 products &middot; 17 suppliers</div>
+</div>
+<div class="tabs">
+  <div class="tab active" data-p="p1">Executive Overview</div>
+  <div class="tab" data-p="p2">Top 10 by Country</div>
+  <div class="tab" data-p="p3">Supplier Discounts</div>
+  <div class="tab" data-p="p4">Geographic &amp; Class</div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1">
+  <div class="grid kpis" style="margin-bottom:14px">
+    <div class="card kpi"><div class="lbl">Net Purchase</div><div class="val" id="k_net"></div><div class="sm">CAD</div></div>
+    <div class="card kpi"><div class="lbl">Purchased</div><div class="val" id="k_pur"></div><div class="sm">CAD</div></div>
+    <div class="card kpi"><div class="lbl">Discount</div><div class="val" id="k_dis"></div><div class="sm">CAD</div></div>
+    <div class="card kpi"><div class="lbl">Order Qty</div><div class="val" id="k_qty"></div><div class="sm">units</div></div>
+    <div class="card kpi"><div class="lbl">Products</div><div class="val" id="k_prd"></div><div class="sm">distinct</div></div>
+    <div class="card kpi"><div class="lbl">Suppliers</div><div class="val" id="k_sup"></div><div class="sm">distinct</div></div>
+  </div>
+  <div class="card panel" style="margin-bottom:14px">
+    <h3>Net Purchase KPI Indicator (PDF thresholds: &lt;10K Low &middot; 10–20K Medium &middot; &gt;20K HIGH)</h3>
+    <div class="kpiband">
+      <div class="badge hi" id="kpi_badge">HIGH</div>
+      <div class="scale"><div class="bar"></div>
+        <div class="ticks"><span>CAD 0</span><span>10,000</span><span>20,000</span><span>total CAD 66.5M</span></div></div>
+    </div>
+    <div class="note">At the full-dataset grain the Net Purchase Amount of CAD 66.5M is far above the 20K threshold → <b>HIGH</b>. In Power BI this measure recolours dynamically as you slice by country, category or supplier.</div>
+  </div>
+  <div class="grid r2" style="margin-bottom:14px">
+    <div class="card panel"><h3>Net Purchase Amount by Month</h3><canvas id="c_month"></canvas></div>
+    <div class="card panel"><h3>Net Purchase by Class</h3><canvas id="c_class"></canvas></div>
+  </div>
+  <div class="grid r21">
+    <div class="card panel"><h3>Net Purchase Amount by Country</h3><canvas id="c_country"></canvas></div>
+    <div class="card panel"><h3>Top Categories by Net Purchase</h3><canvas id="c_cat"></canvas></div>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+  <div class="card panel">
+    <h3>Top 10 Products by Quantity Ordered</h3>
+    <canvas id="c_top" style="max-height:320px"></canvas>
+  </div>
+  <div class="card panel" style="margin-top:14px">
+    <h3>Drill-down: Product Detail (category &amp; net amount)</h3>
+    <table><thead><tr><th>Product</th><th>Number</th><th>Category</th>
+    <th class="num">Qty</th><th class="num">Net (CAD)</th><th>KPI Band</th></tr></thead>
+    <tbody id="t_top"></tbody></table>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="p3">
+  <div class="slicers">
+    <label>Filter by Product Category:</label>
+    <select id="catSel"><option value="ALL">All categories</option></select>
+  </div>
+  <div class="card panel">
+    <h3>Suppliers Offering Discounts (filtered by Product Category)</h3>
+    <table><thead><tr><th>Supplier</th><th>Category</th>
+    <th class="num">Discount (CAD)</th><th class="num">Net (CAD)</th><th class="num">Disc %</th></tr></thead>
+    <tbody id="t_sup"></tbody></table>
+    <div class="note">Implements SQL Q3 — only lines where UnitPriceDiscount &gt; 0, grouped by supplier and category.</div>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="p4">
+  <div class="grid r2" style="margin-bottom:14px">
+    <div class="card panel"><h3>Total Purchased by Country (drill: Country → State → City in Power BI)</h3><canvas id="c_geo"></canvas></div>
+    <div class="card panel"><h3>Quantity by Class</h3><canvas id="c_clsqty"></canvas></div>
+  </div>
+  <div class="card panel">
+    <h3>Country Summary — Purchased, Discount &amp; Net Amount</h3>
+    <table><thead><tr><th>Country</th><th class="num">Qty</th><th class="num">Purchased</th>
+    <th class="num">Discount</th><th class="num">Net</th><th class="num">Share</th></tr></thead>
+    <tbody id="t_geo"></tbody></table>
+  </div>
+</div>
+
+<div class="foot">Generated from Purchase_Transaction.xls &middot; calculations per City of Mainland brief: Net = (UnitPrice×Qty) − (UnitPriceDiscount×UnitPrice×Qty)</div>
+
+<script>
+const DASH={"summary": {"rows": 26357, "suppliers": 17, "products": 104, "countries": 6, "categories": 37, "total_purchased": 66998324.33, "total_discount": 494707.48, "total_net": 66503616.85, "total_qty": 79013, "date_min": "2011-05-31", "date_max": "2014-05-01"}, "by_country": [{"Country": "United States", "Net": 44944366.14, "Qty": 52280, "Purch": 45237253.5, "Disc": 292887.36}, {"Country": "Canada", "Net": 11666844.65, "Qty": 14214, "Purch": 11745178.66, "Disc": 78334.01}, {"Country": "France", "Net": 3570383.77, "Qty": 4530, "Purch": 3607597.61, "Disc": 37213.84}, {"Country": "United Kingdom", "Net": 3417279.43, "Qty": 4364, "Purch": 3446674.35, "Disc": 29394.92}, {"Country": "Germany", "Net": 1578111.56, "Qty": 2004, "Purch": 1606936.6, "Disc": 28825.04}, {"Country": "Australia", "Net": 1326631.3, "Qty": 1621, "Purch": 1354683.61, "Disc": 28052.31}], "by_class": [{"Class": "High", "Net": 41485850.42, "Qty": 29832}, {"Class": "Low", "Net": 11576405.37, "Qty": 29579}, {"Class": "Medium", "Net": 13441361.06, "Qty": 19602}], "by_cat": [{"CategoryName": "Road Bikes", "Net": 29388854.32, "Qty": 39128}, {"CategoryName": "Mountain Bikes", "Net": 26492683.41, "Qty": 23351}, {"CategoryName": "Touring Bikes", "Net": 10451489.24, "Qty": 12584}, {"CategoryName": "Handlebars", "Net": 170589.88, "Qty": 3950}], "by_month": [{"OrderMonth": "2011-05", "Net": 453231.76}, {"OrderMonth": "2011-07", "Net": 1413253.62}, {"OrderMonth": "2011-08", "Net": 1832391.23}, {"OrderMonth": "2011-10", "Net": 3696472.92}, {"OrderMonth": "2011-12", "Net": 687178.2}, {"OrderMonth": "2012-01", "Net": 3190315.57}, {"OrderMonth": "2012-02", "Net": 813847.5}, {"OrderMonth": "2012-03", "Net": 2082726.28}, {"OrderMonth": "2012-04", "Net": 849119.3}, {"OrderMonth": "2012-05", "Net": 1810597.99}, {"OrderMonth": "2012-06", "Net": 2694233.55}, {"OrderMonth": "2012-07", "Net": 2168803.13}, {"OrderMonth": "2012-08", "Net": 1470943.99}, {"OrderMonth": "2012-09", "Net": 2502137.95}, {"OrderMonth": "2012-10", "Net": 1739755.55}, {"OrderMonth": "2012-11", "Net": 1173319.71}, {"OrderMonth": "2012-12", "Net": 2156635.88}, {"OrderMonth": "2013-01", "Net": 1362296.6}, {"OrderMonth": "2013-02", "Net": 1514416.72}, {"OrderMonth": "2013-03", "Net": 2352663.5}, {"OrderMonth": "2013-04", "Net": 1548719.6}, {"OrderMonth": "2013-05", "Net": 1935050.77}, {"OrderMonth": "2013-06", "Net": 3124584.05}, {"OrderMonth": "2013-07", "Net": 2924769.8}, {"OrderMonth": "2013-08", "Net": 1881632.49}, {"OrderMonth": "2013-09", "Net": 2815816.1}, {"OrderMonth": "2013-10", "Net": 2862981.12}, {"OrderMonth": "2013-11", "Net": 1460869.65}, {"OrderMonth": "2013-12", "Net": 2360847.74}, {"OrderMonth": "2014-01", "Net": 2433832.7}, {"OrderMonth": "2014-02", "Net": 563.75}, {"OrderMonth": "2014-03", "Net": 4464824.87}, {"OrderMonth": "2014-05", "Net": 2724783.26}], "top_prod": [{"ProductName": "Mountain-200 Black, 38", "ProductNumber": "BK-M68B-38", "CategoryName": "Mountain Bikes", "Net": 3105727.04, "Qty": 2395}, {"ProductName": "Road-650 Red, 44", "ProductNumber": "BK-R50R-44", "CategoryName": "Road Bikes", "Net": 888811.05, "Qty": 2182}, {"ProductName": "Road-650 Black, 52", "ProductNumber": "BK-R50B-52", "CategoryName": "Road Bikes", "Net": 975992.4, "Qty": 2181}, {"ProductName": "Road-650 Red, 60", "ProductNumber": "BK-R50R-60", "CategoryName": "Road Bikes", "Net": 976456.89, "Qty": 2179}, {"ProductName": "Mountain-200 Black, 42", "ProductNumber": "BK-M68B-42", "CategoryName": "Mountain Bikes", "Net": 2646353.16, "Qty": 2050}, {"ProductName": "Road-650 Red, 62", "ProductNumber": "BK-R50R-62", "CategoryName": "Road Bikes", "Net": 822446.21, "Qty": 1821}, {"ProductName": "Road-650 Red, 48", "ProductNumber": "BK-R50R-48", "CategoryName": "Road Bikes", "Net": 811944.94, "Qty": 1800}, {"ProductName": "Mountain-200 Silver, 38", "ProductNumber": "BK-M68S-38", "CategoryName": "Mountain Bikes", "Net": 2354215.27, "Qty": 1798}, {"ProductName": "Road-650 Black, 58", "ProductNumber": "BK-R50B-58", "CategoryName": "Road Bikes", "Net": 811635.87, "Qty": 1795}, {"ProductName": "Mountain-200 Silver, 42", "ProductNumber": "BK-M68S-42", "CategoryName": "Mountain Bikes", "Net": 2181044.23, "Qty": 1674}], "supp_disc": [{"Supplier": "Ito Shu", "CategoryName": "Mountain Bikes", "Disc": 41910.06, "Net": 162886.23}, {"Supplier": "Mitchell Linda", "CategoryName": "Mountain Bikes", "Disc": 38663.27, "Net": 332644.0}, {"Supplier": "Ito Shu", "CategoryName": "Touring Bikes", "Disc": 27629.2, "Net": 247973.71}, {"Supplier": "Varkey Chudukatil Ranjit", "CategoryName": "Touring Bikes", "Disc": 26454.99, "Net": 235437.49}, {"Supplier": "Valdez Rachel", "CategoryName": "Touring Bikes", "Disc": 25154.43, "Net": 198708.66}, {"Supplier": "Tsoflias Lynn", "CategoryName": "Touring Bikes", "Disc": 22183.51, "Net": 114265.33}, {"Supplier": "Reiter Tsvi", "CategoryName": "Mountain Bikes", "Disc": 22067.99, "Net": 179485.4}, {"Supplier": "Mitchell Linda", "CategoryName": "Touring Bikes", "Disc": 22038.32, "Net": 172779.06}, {"Supplier": "Saraiva Jos\u00e9", "CategoryName": "Touring Bikes", "Disc": 20943.25, "Net": 173869.03}, {"Supplier": "Pak Jae", "CategoryName": "Touring Bikes", "Disc": 20127.28, "Net": 105548.06}, {"Supplier": "Jiang Stephen", "CategoryName": "Mountain Bikes", "Disc": 17033.13, "Net": 31374.7}, {"Supplier": "Mensa-Annan Tete", "CategoryName": "Touring Bikes", "Disc": 14414.72, "Net": 88378.4}, {"Supplier": "Campbell David", "CategoryName": "Touring Bikes", "Disc": 13651.91, "Net": 119137.36}, {"Supplier": "Reiter Tsvi", "CategoryName": "Touring Bikes", "Disc": 12138.89, "Net": 56071.46}, {"Supplier": "Mitchell Linda", "CategoryName": "Road Bikes", "Disc": 11623.29, "Net": 212763.57}]};
+const fmtM=v=>'CAD '+(v/1e6).toFixed(1)+'M';
+const fmt0=v=>v.toLocaleString('en-US',{maximumFractionDigits:0});
+const fmtC=v=>v.toLocaleString('en-US',{maximumFractionDigits:0});
+const band=v=>v<10000?'lo':(v<=20000?'md':'hi');
+const bandTxt=v=>v<10000?'Low':(v<=20000?'Medium':'HIGH');
+const C={c1:'#118dff',c2:'#12239e',c3:'#e66c37',c4:'#6b007b',hi:'#107c10',md:'#f7b500',lo:'#d13438'};
+const s=DASH.summary;
+k_net.textContent=fmtM(s.total_net);k_pur.textContent=fmtM(s.total_purchased);
+k_dis.textContent='CAD '+(s.total_discount/1e3).toFixed(0)+'K';k_qty.textContent=fmt0(s.total_qty);
+k_prd.textContent=s.products;k_sup.textContent=s.suppliers;
+const bb=band(s.total_net);kpi_badge.className='badge '+bb;kpi_badge.textContent=bandTxt(s.total_net);
+
+Chart.defaults.font.family="'Segoe UI',Arial";Chart.defaults.font.size=11;Chart.defaults.plugins.legend.display=false;
+const noLeg={plugins:{legend:{display:false}},maintainAspectRatio:false};
+
+new Chart(c_month,{type:'line',data:{labels:DASH.by_month.map(x=>x.OrderMonth),
+ datasets:[{data:DASH.by_month.map(x=>x.Net),borderColor:C.c1,backgroundColor:'rgba(17,141,255,.12)',fill:true,tension:.3,pointRadius:0,borderWidth:2}]},
+ options:{...noLeg,scales:{y:{ticks:{callback:v=>(v/1e6).toFixed(0)+'M'}}}}});
+
+new Chart(c_class,{type:'doughnut',data:{labels:DASH.by_class.map(x=>x.Class),
+ datasets:[{data:DASH.by_class.map(x=>x.Net),backgroundColor:[C.hi,C.lo,C.md]}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom'}}}});
+
+new Chart(c_country,{type:'bar',data:{labels:DASH.by_country.map(x=>x.Country),
+ datasets:[{data:DASH.by_country.map(x=>x.Net),backgroundColor:C.c1}]},
+ options:{...noLeg,indexAxis:'y',scales:{x:{ticks:{callback:v=>(v/1e6).toFixed(0)+'M'}}}}});
+
+new Chart(c_cat,{type:'bar',data:{labels:DASH.by_cat.map(x=>x.CategoryName),
+ datasets:[{data:DASH.by_cat.map(x=>x.Net),backgroundColor:C.c3}]},
+ options:{...noLeg,scales:{y:{ticks:{callback:v=>(v/1e6).toFixed(0)+'M'}}}}});
+
+// page2
+new Chart(c_top,{type:'bar',data:{labels:DASH.top_prod.map(x=>x.ProductName),
+ datasets:[{data:DASH.top_prod.map(x=>x.Qty),backgroundColor:C.c2}]},
+ options:{...noLeg,indexAxis:'y'}});
+t_top.innerHTML=DASH.top_prod.map(p=>`<tr><td>${p.ProductName}</td><td>${p.ProductNumber}</td><td>${p.CategoryName}</td>
+ <td class="num">${fmt0(p.Qty)}</td><td class="num">${fmtC(p.Net)}</td>
+ <td><span class="pill ${band(p.Net)}">${bandTxt(p.Net)}</span></td></tr>`).join('');
+
+// page3
+const cats=[...new Set(DASH.supp_disc.map(x=>x.CategoryName))];
+cats.forEach(c=>catSel.innerHTML+=`<option>${c}</option>`);
+function renderSup(){const f=catSel.value;
+ const rows=DASH.supp_disc.filter(r=>f==='ALL'||r.CategoryName===f);
+ t_sup.innerHTML=rows.map(r=>`<tr><td>${r.Supplier}</td><td>${r.CategoryName}</td>
+ <td class="num">${fmtC(r.Disc)}</td><td class="num">${fmtC(r.Net)}</td>
+ <td class="num">${(r.Disc/r.Net*100).toFixed(1)}%</td></tr>`).join('');}
+catSel.onchange=renderSup;renderSup();
+
+// page4
+new Chart(c_geo,{type:'bar',data:{labels:DASH.by_country.map(x=>x.Country),
+ datasets:[{data:DASH.by_country.map(x=>x.Purch),backgroundColor:C.c4}]},
+ options:{...noLeg,scales:{y:{ticks:{callback:v=>(v/1e6).toFixed(0)+'M'}}}}});
+new Chart(c_clsqty,{type:'bar',data:{labels:DASH.by_class.map(x=>x.Class),
+ datasets:[{data:DASH.by_class.map(x=>x.Qty),backgroundColor:[C.hi,C.lo,C.md]}]},options:noLeg});
+const tot=s.total_net;
+t_geo.innerHTML=DASH.by_country.map(c=>`<tr><td>${c.Country}</td><td class="num">${fmt0(c.Qty)}</td>
+ <td class="num">${fmtC(c.Purch)}</td><td class="num">${fmtC(c.Disc)}</td><td class="num">${fmtC(c.Net)}</td>
+ <td class="num">${(c.Net/tot*100).toFixed(1)}%</td></tr>`).join('');
+
+// tabs
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+ t.classList.add('active');document.getElementById(t.dataset.p).classList.add('active');});
+</script>
+</body></html>

@@ -1,0 +1,7 @@
+relationship PurchaseTrans_DimProduct
+	fromColumn: PurchaseTrans.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship DimProduct_DimCategory
+	fromColumn: DimProduct.CategoryID
+	toColumn: DimCategory.CategoryID

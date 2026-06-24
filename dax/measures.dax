@@ -1,0 +1,54 @@
+// ============================================================
+// City of Mainland — DAX measures (Power BI)
+// Add these to the PurchaseTrans table.
+// ============================================================
+
+// --- Core amounts (per project brief) ---
+
+Purchased Amount =
+SUMX (
+    PurchaseTrans,
+    PurchaseTrans[UnitPrice] * PurchaseTrans[OrderQty]
+)
+
+Discount Amount =
+SUMX (
+    PurchaseTrans,
+    PurchaseTrans[UnitPriceDiscount]
+        * PurchaseTrans[UnitPrice]
+        * PurchaseTrans[OrderQty]
+)
+
+Net Purchase Amount =
+[Purchased Amount] - [Discount Amount]
+
+
+// --- Supporting measures ---
+
+Total Order Qty   = SUM ( PurchaseTrans[OrderQty] )
+Distinct Products = DISTINCTCOUNT ( PurchaseTrans[ProductID] )
+Distinct Suppliers = DISTINCTCOUNT ( PurchaseTrans[Supplier] )
+
+
+// --- KPI band (per brief thresholds, CAD) ---
+//   < 10,000          -> "Low"
+//   10,000 .. 20,000  -> "Medium"
+//   > 20,000          -> "HIGH"
+// Evaluates at the visual's current filter grain, so it
+// recolours dynamically when sliced by country/category/supplier.
+
+Net Purchase KPI =
+VAR Net = [Net Purchase Amount]
+RETURN
+    SWITCH (
+        TRUE (),
+        Net < 10000,  "Low",
+        Net <= 20000, "Medium",
+        "HIGH"
+    )
+
+// Numeric companion (1/2/3) for conditional formatting / sorting
+Net Purchase KPI Rank =
+VAR Net = [Net Purchase Amount]
+RETURN
+    SWITCH ( TRUE (), Net < 10000, 1, Net <= 20000, 2, 3 )
